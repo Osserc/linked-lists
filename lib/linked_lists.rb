@@ -66,6 +66,30 @@ class LinkedList
         @tail = explorer
     end
 
+    def contains?(value)
+        explorer = @head
+        counter = 0
+        until explorer.nil? do
+            if explorer.value == value
+                return true
+            end
+        explorer = explorer.next_node 
+        end
+        return false
+    end
+
+    def find(value)
+
+    end
+
+    def to_s
+
+
+
+    # to_s represent your LinkedList objects as strings, so you can print them out and preview them in the console.
+    # The format should be: ( value ) -> ( value ) -> ( value ) -> nil
+    end
+
 end
 
 class Node
@@ -74,7 +98,6 @@ class Node
         @value = value
         @next_node = next_node
     end
-
 end
 
 
@@ -87,4 +110,6 @@ puts list.size
 puts list.at(4)
 list.pop
 puts list.size
+puts list.contains?(1)
+puts list.contains?(5)
 puts "Stop"
