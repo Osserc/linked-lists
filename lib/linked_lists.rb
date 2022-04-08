@@ -28,42 +28,40 @@ class LinkedList
         end
     end
 
-    def update_position(first_node, second_node)
-        temp = second_node.next_node
-        first_node.next_node = second_node.next_node
-        temp
-    end
-
     def size
         explorer = @head
-        counter = 0
+        counter = 1
         until explorer.nil? do
             explorer = explorer.next_node
             counter += 1
         end
-        counter
+        counter -= 1
     end
 
     def at(index)
         explorer = @head
-        counter = 0
-        until counter == index - 1 do
+        counter = 1
+        until counter == index do
             explorer = explorer.next_node
             counter += 1
         end
-        explorer.value
+        explorer
     end
 
     def pop
         explorer = @head
-        counter = 0
-        size = self.size - 2
+        counter = 1
+        size = self.size - 1
         until counter == size do
             explorer = explorer.next_node
             counter += 1
         end
         explorer.next_node = nil
         @tail = explorer
+    end
+
+    def shift
+        @head = @head.next_node
     end
 
     def contains?(value)
@@ -77,9 +75,9 @@ class LinkedList
 
     def find(value)
         explorer = @head
-        counter = 0
+        counter = 1
         until explorer.nil?  do
-            return counter += 1 if explorer.value == value
+            return counter if explorer.value == value
             explorer = explorer.next_node
             counter += 1
         end
@@ -94,10 +92,43 @@ class LinkedList
             explorer = explorer.next_node
         end
         puts string += "nil"
+    end
 
+    def insert_at(value, index)
+        size = self.size
+        return self.prepend(value) if index < 2
+        return self.append(value) if index > size
+        before = nil
+        after = nil
+        node = Node.new(value)
+        explorer = @head
+        counter = 1
+        until counter > index do
+            before = explorer if counter == index - 1
+            after = explorer if counter == index
+            explorer = explorer.next_node
+            counter += 1
+        end
+        before.next_node = node
+        node.next_node = after
+    end
 
-    # to_s represent your LinkedList objects as strings, so you can print them out and preview them in the console.
-    # The format should be: ( value ) -> ( value ) -> ( value ) -> nil
+    def remove_at(index)
+        size = self.size
+        return self.shift if index < 2
+        return self.pop if index > size
+        before = nil
+        target = nil
+        explorer = @head
+        counter = 1
+        until counter > index do
+            before = explorer if counter == index - 1
+            target = explorer if counter == index
+            explorer = explorer.next_node
+            counter += 1
+        end
+        before.next_node = target.next_node
+        target.next_node = nil
     end
 
 end
@@ -112,16 +143,27 @@ end
 
 
 list = LinkedList.new(10, 32)
-list.append(5)
-list.append(43)
-puts list.size
-list.prepend(21)
-puts list.size
-puts list.at(4)
-list.pop
-puts list.size
-puts list.contains?(1)
-puts list.contains?(5)
-puts list.find(32)
 list.to_s
-puts "Stop"
+list.append(5)
+list.to_s
+list.append(43)
+list.to_s
+puts "The list has #{list.size} elements."
+list.prepend(21)
+list.to_s
+puts "The list has #{list.size} elements."
+puts "The node in position 4 is #{list.at(4)}."
+list.pop
+list.to_s
+puts "The list has #{list.size} elements."
+puts "Does the list contain the value 1? #{list.contains?(1)}"
+puts "Does the list contain the value 5? #{list.contains?(5)}"
+puts "The value 32 is in position #{list.find(32)}."
+list.insert_at(11, 3)
+list.to_s
+list.insert_at(0, 7)
+list.to_s
+list.shift
+list.to_s
+list.remove_at(4)
+list.to_s
