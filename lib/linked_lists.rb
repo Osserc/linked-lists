@@ -1,7 +1,3 @@
-# module SiFo
-#     sizing = Proc.new { | exploration | exploration.nil? }
-# end
-
 class LinkedList
     attr_reader :head, :tail
     # include SiFo
@@ -39,31 +35,35 @@ class LinkedList
     end
 
     def size
-        counter = exploring(&sizing)[0]
-        puts "The list contains #{counter} nodes."
+        explorer = @head
+        counter = 0
+        until explorer.nil? do
+            explorer = explorer.next_node
+            counter += 1
+        end
+        counter
     end
 
     def at(index)
-        node = exploring(index, &finding)[1]
-        puts node.value
-    end
-
-    def exploring(index = 0)
-        exploration = @head
+        explorer = @head
         counter = 0
-        until yield(exploration, counter, index) do
-            exploration = exploration.next_node
+        until counter == index - 1 do
+            explorer = explorer.next_node
             counter += 1
         end
-        return counter, exploration
+        explorer.value
     end
 
-    def sizing
-        Proc.new { | exploration | exploration.nil? }
-    end
-
-    def finding
-        Proc.new { | exploration, counter, index | counter == index - 1}
+    def pop
+        explorer = @head
+        counter = 0
+        size = self.size - 2
+        until counter == size do
+            explorer = explorer.next_node
+            counter += 1
+        end
+        explorer.next_node = nil
+        @tail = explorer
     end
 
 end
@@ -81,8 +81,10 @@ end
 list = LinkedList.new(10, 32)
 list.append(5)
 list.append(43)
-list.size
+puts list.size
 list.prepend(21)
-list.size
-list.at(4)
+puts list.size
+puts list.at(4)
+list.pop
+puts list.size
 puts "Stop"
