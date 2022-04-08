@@ -68,7 +68,6 @@ class LinkedList
 
     def contains?(value)
         explorer = @head
-        counter = 0
         until explorer.nil? do
             if explorer.value == value
                 return true
@@ -79,7 +78,15 @@ class LinkedList
     end
 
     def find(value)
-
+        explorer = @head
+        counter = 0
+        until explorer.nil?  do
+            if explorer.value == value
+                return counter += 1
+            end
+            explorer = explorer.next_node
+            counter += 1
+        end
     end
 
     def to_s
@@ -112,4 +119,5 @@ list.pop
 puts list.size
 puts list.contains?(1)
 puts list.contains?(5)
+puts list.find(32)
 puts "Stop"
